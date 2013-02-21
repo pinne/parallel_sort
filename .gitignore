@@ -1,0 +1,8 @@
+*.swp
+bin/
+*.highscore
+*.html
+.project
+.classpath
+.settings/
+*.class
