@@ -1,3 +1,4 @@
+*.dia~
 *.swp
 bin/
 *.highscore
