@@ -8,6 +8,6 @@
  */
 package com.douchedata.parallel;
 
-public class SortTimer {
-
+interface TestStrategy {
+	void execute(float [] array, int left, int right);
 }

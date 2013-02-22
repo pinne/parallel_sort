@@ -8,7 +8,11 @@
  */
 package com.douchedata.parallel;
 
-public class Quicksort {
+public class Quicksort implements TestStrategy {
+	
+	public void execute(float [] array, int left, int right) {
+		sort(array, left, right);
+	}
 	
 	public void sort(float[] array, int left, int right) {
 		if (left < right) {
@@ -23,28 +27,22 @@ public class Quicksort {
 	private int partition(float[] array, int left, int right, int pivotIndex) {
 		float pivotValue = array[pivotIndex];
 		
-		// swap array[pivotIndex] and array[right]
-		float tmp = array[pivotIndex];
-		array[pivotIndex] = array[right];
-		array[right] = tmp;
-		
+		swap(array, pivotIndex, right);
 		int storeIndex = left;
 		
 		for (int i = left; i < right; i += 1) {
 			if (array[i] < pivotValue) {
-				// swap array[i] and array[storeIndex]
-				tmp = array[i];
-				array[i] = array[storeIndex];
-				array[storeIndex] = tmp;
-
+				swap(array, i, storeIndex);
 				storeIndex += 1;
 			}
 		}
-		// swap array[storeIndex] and array[right]
-		tmp = array[storeIndex];
-		array[storeIndex] = array[right];
-		array[right] = tmp;
-		
+		swap(array, storeIndex, right);
 		return storeIndex;
+	}
+	
+	private void swap(float[] array, final int a, final int b) {
+		final float tmp = array[a];
+		array[a] = array[b];
+		array[b] = tmp;
 	}
 }
