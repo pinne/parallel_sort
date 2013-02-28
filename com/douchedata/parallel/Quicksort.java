@@ -14,7 +14,7 @@ public class Quicksort implements TestStrategy {
 		sort(array, left, right);
 	}
 	
-	public void sort(float[] array, int left, int right) {
+	public static void sort(float[] array, int left, int right) {
 		if (left < right) {
 			int pivotIndex = left + (right-left)/2;
 			int pivotNewIndex = partition(array, left, right, pivotIndex);
@@ -24,7 +24,7 @@ public class Quicksort implements TestStrategy {
 		}
 	}
 	
-	private int partition(float[] array, int left, int right, int pivotIndex) {
+	private static int partition(float[] array, int left, int right, int pivotIndex) {
 		float pivotValue = array[pivotIndex];
 		
 		swap(array, pivotIndex, right);
@@ -40,7 +40,7 @@ public class Quicksort implements TestStrategy {
 		return storeIndex;
 	}
 	
-	private void swap(float[] array, final int a, final int b) {
+	private static void swap(float[] array, final int a, final int b) {
 		final float tmp = array[a];
 		array[a] = array[b];
 		array[b] = tmp;

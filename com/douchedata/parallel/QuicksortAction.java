@@ -8,13 +8,10 @@
  */
 package com.douchedata.parallel;
 
-import java.util.Arrays;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveAction;
 
 public class QuicksortAction extends RecursiveAction implements TestStrategy {
-	
-	private static Quicksort nonParallel = new Quicksort();
 	private static final long serialVersionUID = 1L;
 	private static int THRESHOLD = 60_000;
 	private float[] array;
@@ -31,13 +28,15 @@ public class QuicksortAction extends RecursiveAction implements TestStrategy {
 	}
 	
 	public void execute(float[] array, int left, int right) {
-		compute();
+		ForkJoinPool pool = new ForkJoinPool();
+		QuicksortAction task = new QuicksortAction(array, 0, array.length-1);
+		pool.invoke(task);
 	}
 	
 	public void compute() {
 		if (right - left < THRESHOLD) {
 			// Around and below this point, there's no point in forking anymore
-			nonParallel.sort(array, left, right);
+			Quicksort.sort(array, left, right);
 		} else if (left < right) {
 			int pivotNewIndex = partition(array, left, right, pivotIndex);
 			

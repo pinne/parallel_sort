@@ -9,12 +9,10 @@
 package com.douchedata.parallel;
 
 import java.util.Arrays;
-import java.util.concurrent.ForkJoinPool;
 
 public class ParallelSort {
-	private static final int LISTSIZE = 30_000_000;
-	private static final int SAMPLESIZE = 4;
-	private static long totalTime;
+	public static final int LISTSIZE = 1_000_000;
+	public static final int SAMPLESIZE = 10;
 	
 	public static void main(String[] args) {
 		RandomList randList = new RandomList(LISTSIZE);
@@ -23,7 +21,6 @@ public class ParallelSort {
 		Arrays.sort(preSorted);
 		
 		TestContext context;
-		TestParallelContext parContext;
 		long duration;
 		
 		int cores = Runtime.getRuntime().availableProcessors();
@@ -32,7 +29,7 @@ public class ParallelSort {
 		// Arrays.sort
 		System.out.println("Built-in sort:");
 		list = randList.getList();
-		context = new TestContext(new BuiltinSort(), preSorted, randList);
+		context = new TestContext(new BuiltinSort());
 		duration = context.executeStrategy(SAMPLESIZE);
 		System.out.println("\tTime: " + duration);
 		System.out.println("");
@@ -40,42 +37,18 @@ public class ParallelSort {
 		// Quicksort
 		System.out.println("Quicksort:");
 		list = randList.getList();
-		context = new TestContext(new Quicksort(), preSorted, randList);
+		context = new TestContext(new Quicksort());
 		duration = context.executeStrategy(SAMPLESIZE);
 		System.out.println("\tTime: " + duration);
 		System.out.println("");
 
-		// Without strategy pattern
-		System.out.println("Parallel Quicksort:");
-		for (int i = 0; i < SAMPLESIZE; i += 1) {
-			list = randList.getList();
-			System.gc();
-			long startTime = System.nanoTime();
-			ForkJoinPool pool = new ForkJoinPool();
-			QuicksortAction task = new QuicksortAction(list, 0, list.length-1);
-			pool.invoke(task);
-			long endTime = System.nanoTime();
-			duration = endTime - startTime;
-			totalTime += duration;
-    		// Test and print result
-    		if (Arrays.equals(preSorted, list)) {
-    			System.out.print(i + " ");
-    		} else {
-    			System.out.print("fail ");
-    		}
-		}
-		duration = totalTime / SAMPLESIZE;
+		// QuicksortAction
+		System.out.println("Parallel Quicksort, using strategy pattern:");
+		list = randList.getList();
+		QuicksortAction task = new QuicksortAction(list, 0, list.length-1);
+		context = new TestContext(task);
+		duration = context.executeStrategy(SAMPLESIZE);
 		System.out.println("\tTime: " + duration);
 		System.out.println("");
-
-		//		// QuicksortAction
-		//		System.out.println("Parallel Quicksort:");
-		//		list = randList.getList();
-		//		QuicksortAction task = new QuicksortAction(list, 0, list.length-1);
-		//		parContext = new TestParallelContext(task, preSorted, randList);
-		//		duration = parContext.executeStrategy(SAMPLESIZE);
-		//		System.out.println("\tTime: " + duration);
-		//		System.out.println("");
 	}
-
 }

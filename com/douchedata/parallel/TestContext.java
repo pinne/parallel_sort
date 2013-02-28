@@ -15,13 +15,10 @@ public class TestContext {
 	
 	private TestStrategy strategy;
 	private long totalTime;
-	private float[] preSorted;
-	private float[] unsorted;
 	private RandomList randList ;
 	 
-    public TestContext(TestStrategy strategy, float[] preSorted, RandomList randList) {
-		this.preSorted = preSorted;
-		this.randList = randList;
+    public TestContext(TestStrategy strategy) {
+		this.randList = new RandomList(LISTSIZE);
         this.strategy = strategy;
     }
  
@@ -29,9 +26,13 @@ public class TestContext {
      * Runs the test n times and returns the average running time.
      */
     public long executeStrategy(int samples) {
+    	float[] unsorted;
+    	float[] preSorted = randList.getList();
+		Arrays.sort(preSorted);
+		
     	for (int i = 0; i < samples; i += 1) {
     		// Get the unsorted list
-    		this.unsorted = randList.getList();
+    		unsorted = randList.getList();
     		
     		System.gc();
     		
@@ -40,15 +41,16 @@ public class TestContext {
     		strategy.execute(unsorted, 0, unsorted.length-1);
     		long endTime = System.nanoTime();
     		long duration = endTime - startTime;
-    		this.totalTime += duration;
     		
+    		if (i > 0)
+    			this.totalTime += duration;
     		// Test and print result
     		if (Arrays.equals(preSorted, unsorted)) {
     			System.out.print(i + " ");
     		} else {
-    			System.out.print("fail ");
+    			System.out.print("x ");
     		}
     	}
-    	return (totalTime / samples);
+    	return (totalTime / samples-1);
     }
 }
