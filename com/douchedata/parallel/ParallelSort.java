@@ -43,10 +43,26 @@ public class ParallelSort {
 		System.out.println("");
 
 		// QuicksortAction
-		System.out.println("Parallel Quicksort, using strategy pattern:");
+		System.out.println("Parallel Quicksort:");
 		list = randList.getList();
 		QuicksortAction task = new QuicksortAction(list, 0, list.length-1);
 		context = new TestContext(task);
+		duration = context.executeStrategy(SAMPLESIZE);
+		System.out.println("\tTime: " + duration);
+		System.out.println("");
+		
+		// Merge sort
+		System.out.println("Merge sort:");
+		list = randList.getList();
+		context = new TestContext(new MergeSort());
+		duration = context.executeStrategy(SAMPLESIZE);
+		System.out.println("\tTime: " + duration);
+		System.out.println("");
+
+		// MergeSortAction
+		System.out.println("Parallel Merge sort:");
+		list = randList.getList();
+		context = new TestContext(new MergeSortAction());
 		duration = context.executeStrategy(SAMPLESIZE);
 		System.out.println("\tTime: " + duration);
 		System.out.println("");

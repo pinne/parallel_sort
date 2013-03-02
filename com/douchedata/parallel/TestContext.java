@@ -11,7 +11,8 @@ package com.douchedata.parallel;
 import java.util.Arrays;
 
 public class TestContext {
-	private static final int LISTSIZE = 10_000_000;
+//	private static final int LISTSIZE = 10_000_000;
+	private static final int LISTSIZE = 1_000_000;
 	
 	private TestStrategy strategy;
 	private long totalTime;
