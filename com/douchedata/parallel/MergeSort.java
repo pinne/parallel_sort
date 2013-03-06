@@ -1,71 +1,53 @@
-/**
- * Program Development in Functional and Object-oriented languages.
- * 
- * skers@kth.se
- * wikmans@kth.se
- * 
- * KTH 2013
- */
 package com.douchedata.parallel;
 
 public class MergeSort implements TestStrategy {
+	float[] array;
+	float[] tmp;
+	int left;
+	int right;
+	
+	public MergeSort(float[] array, float[] tmp, int left, int right) {
+		this.array = array;
+		this.tmp = tmp;
+		this.left = left;
+		this.right = right;
+	}
 	
 	public void execute(float[] array, int left, int right) {
-		float[] sorted = mSort(array);
-		copyArray(array, sorted);
+		float[] tmp = new float[array.length];
+		mSort(array, tmp, left, right);
 	}
 	
-	private float[] mSort(float[] m) {
-		float[] left = new float[m.length / 2];
-		float[] right = new float[m.length - left.length];
-		
-		if (m.length <= 1) {
-			return m;
-		} else {
-			int index = 0;
-			int l = 0;
-			while (l < m.length/2) {
-				left[l++] = m[index++];
-			}
-			
-			int r = 0;
-			while (index < m.length) {
-				right[r++] = m[index++];
-			}
-			
-			left = mSort(left);
-			right = mSort(right);
-			
-			return merge(left, right);
-		}
+	public static void mSort(float[] array, float[] tmp, int left, int right) {
+		if (left >= right) /* base case */
+			return;
+
+		int middle = left + (right-left) /2;
+
+		mSort(array, tmp, left, middle);
+		mSort(array, tmp, middle + 1, right);
+
+		merge(array, tmp, left, right);
 	}
 	
-	private float[] merge(float[] left, float[] right) {
-		float[] target = new float[left.length + right.length];
-		
-		int t = 0;
-		int l = 0;
-		int r = 0;
-		
+	public static void merge(float[] array, float[] tmp, int left, int right) {
+		/* copy active part of array to tmp */
+		for (int i = left; i <= right; i++)
+			tmp[i] = array[i];
+
 		/* merge lists */
-		while (l < left.length && r < right.length) {
-			if (left[l] < right[r])
-				target[t++] = left[l++];
+		int k = left;
+		int mid = left + (right-left) / 2;
+		int j = mid+1;
+		while (k <= right) {
+			if (left > mid)
+				array[k++] = tmp[j++];
+			else if (j > right)
+				array[k++] = tmp[left++];
+			else if (tmp[left] < tmp[j])
+				array[k++] = tmp[left++];
 			else
-				target[t++] = right[r++];
-		}
-		/* append lists */
-		while (l < left.length)
-			target[t++] = left[l++];
-		while (r < right.length)
-			target[t++] = right[r++];
-			
-		return target;
-	}
-	
-	private void copyArray(float[] array, float[] tmp) {
-		for (int i = 0; i < array.length; i += 1) {
-			array[i] = tmp[i];
+				array[k++] = tmp[j++];
 		}
 	}
 }

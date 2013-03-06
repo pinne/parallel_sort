@@ -11,7 +11,7 @@ package com.douchedata.parallel;
 import java.util.Arrays;
 
 public class ParallelSort {
-	public static final int LISTSIZE = 1_000_000;
+	public static final int LISTSIZE = 20_000_000;
 	public static final int SAMPLESIZE = 10;
 	
 	public static void main(String[] args) {
@@ -25,7 +25,7 @@ public class ParallelSort {
 		
 		int cores = Runtime.getRuntime().availableProcessors();
 		System.out.println(cores + " cores available");
-		
+	
 		// Arrays.sort
 		System.out.println("Built-in sort:");
 		list = randList.getList();
@@ -54,7 +54,8 @@ public class ParallelSort {
 		// Merge sort
 		System.out.println("Merge sort:");
 		list = randList.getList();
-		context = new TestContext(new MergeSort());
+		float[] tmp = randList.getList();
+		context = new TestContext(new MergeSort(list, tmp, 0, list.length-1));
 		duration = context.executeStrategy(SAMPLESIZE);
 		System.out.println("\tTime: " + duration);
 		System.out.println("");
@@ -62,7 +63,8 @@ public class ParallelSort {
 		// MergeSortAction
 		System.out.println("Parallel Merge sort:");
 		list = randList.getList();
-		context = new TestContext(new MergeSortAction());
+		float[] list2 = randList.getList();
+		context = new TestContext(new MergeSortAction(list, list2, 0, list.length-1));
 		duration = context.executeStrategy(SAMPLESIZE);
 		System.out.println("\tTime: " + duration);
 		System.out.println("");
