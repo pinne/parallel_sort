@@ -9,7 +9,7 @@ Implementation of merge sort and quicksort using the Fork/Join framework
 Benchmark using the strategy pattern.
 
 ### Class diagram ###
-![Sort class diagram](https://raw.github.com/pinne/sip_protocol/master/doc/class_diagram.png "UML class diagram for sort")
+![Sort class diagram](https://raw.github.com/pinne/parallel_sort/master/doc/class_diagram.png "UML class diagram for sort")
 
 Usage
 -----
